@@ -12,7 +12,7 @@ const PRICE = {
 };
 class BurgerBuilder extends Component {
   constructor(props) {
-    super();
+    super(props);
     this.state = {
       ingredients: {
         salad: 0,
@@ -20,6 +20,7 @@ class BurgerBuilder extends Component {
         meat: 0,
         bacon: 0
       },
+      shakingClassTop: 0,
       totalPrice: 40,
       isPurchase: false
     };
@@ -93,13 +94,31 @@ class BurgerBuilder extends Component {
     for (let key in disableButton) {
       disableButton[key] = disableButton[key] <= 0;
     }
-
     return (
       <Aux>
+        <button
+          onClick={() => {
+            this.setState({
+              shakingClassTop:
+                this.state.shakingClassTop + 50 * (Math.random() > 0.5 ? -1 : 1)
+            });
+          }}
+        >
+          Testing button
+        </button>
         <Modal>
           <OrderSummary ingredients={this.state.ingredients} />
         </Modal>
-        <Burger ingredients={this.state.ingredients}> </Burger>
+        <div
+          style={{
+            top: this.state.shakingClassTop,
+            position: "relative",
+            transition: "all 2s",
+            zIndex:-1
+          }}
+        >
+          <Burger ingredients={this.state.ingredients}> </Burger>
+        </div>
         <BuildControls
           add={this.addIngredient}
           remove={this.removeIngredient}
