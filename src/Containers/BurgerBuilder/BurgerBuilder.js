@@ -21,14 +21,15 @@ class BurgerBuilder extends Component {
         bacon: 0
       },
       totalPrice: 40,
-      isPurchase: false
+      isPurchase: false,
+      purchasable: false
     };
   }
 
   addIngredient = type => {
     const oldCount = this.state.ingredients[type];
     const newCount = oldCount + 1;
-    console.log(newCount);
+
     const updatedCount = {
       ...this.state.ingredients
     };
@@ -37,7 +38,6 @@ class BurgerBuilder extends Component {
     const oldPrice = this.state.totalPrice;
     const newPrice = oldPrice + addPrice;
 
-    console.log("keep checking" + newPrice);
     this.setState(
       {
         ingredients: updatedCount,
@@ -53,7 +53,7 @@ class BurgerBuilder extends Component {
     const oldCount = this.state.ingredients[type];
     if (oldCount < 1) return;
     const newCount = oldCount - 1;
-    console.log("from less---" + newCount);
+
     const updatedCount = { ...this.state.ingredients };
     updatedCount[type] = newCount;
     const oldPrice = this.state.totalPrice;
@@ -85,6 +85,12 @@ class BurgerBuilder extends Component {
     });
   };
 
+  showSummary = () => {
+    this.setState({
+      purchasable: true
+    });
+  };
+
   render() {
     const disableButton = {
       ...this.state.ingredients
@@ -96,16 +102,17 @@ class BurgerBuilder extends Component {
 
     return (
       <Aux>
-        <Modal>
+        <Modal show={this.state.purchasable}>
           <OrderSummary ingredients={this.state.ingredients} />
         </Modal>
-        <Burger ingredients={this.state.ingredients}> </Burger>
+        <Burger ingredients={this.state.ingredients} />
         <BuildControls
           add={this.addIngredient}
           remove={this.removeIngredient}
           checkDisable={disableButton}
           price={this.state.totalPrice}
           purchase={this.state.isPurchase}
+          summary={this.showSummary}
         />
       </Aux>
     );
